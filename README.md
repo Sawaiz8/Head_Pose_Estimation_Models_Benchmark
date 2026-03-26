@@ -36,7 +36,11 @@ This project benchmarks six publicly available head pose estimation approaches o
 | Poses evaluated | -90°, -75°, -60°, -45°, -30°, 0°, +30°, +45°, +60°, +75°, +90° |
 | Total images | 2,200 |
 
-**Important note on ground truth:** The ±90° (full profile) and 0° (frontal) angles are true ground truth positions. The intermediate angles (±30°, ±45°, ±60°, ±75°) are approximate visual estimates. The ground truth is that the sequence is physically ordered, not that each angle is exactly as labelled. The primary evaluation metric is designed with this in mind.
+**Important note on ground truth:** The ±90° (full profile) and 0° (frontal) angles are true ground truth positions. The intermediate angles (±30°, ±45°, ±60°, ±75°) are approximate visual estimates after going through multiple images in the dataset manually. The ground truth is that the sequence is physically ordered, not that each angle is exactly as labelled. The primary evaluation metric is designed with this in mind.
+
+![FEI Face Dataset Example Overview](imgs/dataset_sample.png)
+
+*Illustration: Example montage from FEI Face Dataset (11 head poses, 1 subject). For more, see [dataset homepage](https://fei.edu.br/~cet/facedatabase.html).*
 
 ---
 
