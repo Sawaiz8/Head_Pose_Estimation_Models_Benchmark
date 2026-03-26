@@ -146,7 +146,7 @@ The two MediaPipe approaches are nearly identical in speed since they share the 
 
 ---
 
-## Limitations & Future Work
+## Limitations
 
 **Dataset limitations:** The FEI dataset is collected in a controlled lab environment with uniform backgrounds and consistent lighting. Results may not generalise to in-the-wild conditions with occlusion, varied lighting, or non-frontal camera setups. Ground truth angles for intermediate poses are approximations, not precise measurements.
 
@@ -155,12 +155,6 @@ The two MediaPipe approaches are nearly identical in speed since they share the 
 **Angle compression:** Most methods underestimate yaw magnitude at extreme angles (±75°, ±90°). This is a shared limitation of single-camera pose estimation: as the face approaches profile, geometric cues become ambiguous and deep models trained on non-uniform angle distributions tend to regress toward the mean. The MediaPipe native matrix exhibits the most severe compression and would require post-hoc calibration for applications needing accurate absolute angles.
 
 **Roll at extreme yaw:** Several PnP-based methods show significant roll-yaw coupling at ±90°, a known consequence of Euler angle decomposition near gimbal lock. This is an artefact of the decomposition convention rather than a true estimation error.
-
-**Future work:**
-- Evaluate on in-the-wild datasets (e.g. BIWI, 300W-LP, AFLW2000) for real-world generalisation
-- Benchmark inference speed and computational cost per method
-- Investigate post-hoc angle calibration to correct the compression bias in MediaPipe Native Matrix
-- Test robustness to occlusion, glasses, and non-neutral expressions
 
 ---
 
@@ -175,3 +169,43 @@ It achieves the best monotonicity (11 breaks), the tightest frontal distribution
 **MediaPipe + PnP (Notebook 5)** is the best choice when accurate absolute yaw values are required without calibration. It reaches ~70° at true ±90°, the closest to ground truth of any method, with competitive monotonicity (42 breaks) and the same fast 0.0304s inference time as the native matrix approach. The trade-off is a persistent ~8° pitch bias across all positions that would need to be corrected for multi-axis applications.
 
 The two PnP-based approaches (MTCNN and FacePose_pytorch) and LivePortrait are not recommended as primary choices given their higher break counts and no compensating advantages in speed or calibration.
+
+---
+ 
+## Contributing a New Benchmark
+ 
+If you have tested a head pose estimation method on the FEI dataset using the same evaluation pipeline and want to add it to this benchmark, contributions are welcome via pull request.
+ 
+### What to Include
+ 
+Your pull request should contain:
+ 
+1. **A notebook** following the same structure as the existing six. It should include:
+   - A header cell describing the method and linking to the source repo
+   - The full dataset processing loop producing `person_pose`, `yaw_angles_by_position`, `pitch_angles_by_position`, and `roll_angles_by_position`
+   - The monotonic yaw increase check with printed output
+   - The trimmed mean table for all 11 positions
+   - The yaw distribution plots for all 11 positions
+   - Markdown annotation cells before each major section following the style of the existing notebooks
+ 
+2. **Your metric outputs** included as printed output or as a results cell in the notebook so they are visible without re-running.
+ 
+3. **An update to this README** adding your method to all four results tables (monotonic increase, trimmed mean yaw, pitch and roll stability, and distribution std at frontal) and to the methods table with a link to the source repo.
+ 
+### Steps to Submit
+ 
+1. Fork this repository
+2. Create a new branch with a descriptive name, for example `benchmark/hopenet` or `benchmark/sixdrepnet`
+3. Add your notebook to the root of the repository
+4. Update the README tables with your results
+5. Open a pull request with a short description of the method, the source repo, and a one-line summary of your key finding
+ 
+### Requirements for Consistency
+ 
+To keep results comparable across methods:
+ 
+- Use the same FEI dataset with the same filename convention (`{person_id}-{position_index}.jpg`)
+- Use the same 11 positions and the same `positions_order` list as the existing notebooks
+- Use `trim_fraction = 0.1` for all trimmed mean calculations
+- Report inference time averaged over the full dataset on your hardware, and include your hardware specs
+- If your method does not compute roll, set roll to 0 and note this clearly in your notebook header
