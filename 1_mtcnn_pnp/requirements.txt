@@ -1,0 +1,8 @@
+matplotlib==3.10.8
+pandas==3.0.1
+numpy==2.4.2
+mtcnn[tensorflow]
+tqdm==4.67.3
+opencv-python==4.13.0.92
+scipy==1.17.1
+seaborn==0.13.2
