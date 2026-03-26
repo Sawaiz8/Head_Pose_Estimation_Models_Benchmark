@@ -113,7 +113,7 @@ Histogram + KDE plots of the full yaw distribution at each position, showing spr
 |---|---|---|---|
 | MTCNN + PnP | 4.28° | 0.04° | ✅ |
 | FacePose_pytorch | 3.79° | -0.41° | ✅ |
-| L2CS Gaze | -1.80° | 0.00° | ❌ hardcoded |
+| L2CS Gaze | -1.80° | Not calculated | ❌ |
 | LivePortrait | -0.23° | -0.52° | ✅ |
 | MediaPipe + PnP | 7.95° | -1.30° | ✅ |
 | MediaPipe Native Matrix | 3.05° | -0.91° | ✅ |
